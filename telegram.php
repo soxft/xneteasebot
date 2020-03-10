@@ -1,6 +1,6 @@
 <?php
 require_once "send.php";
-$token = "1019445623:AAFbkN2n3rcmQIGbpmSRiQ1Ek5OhZrfe8ic";
+$token = "你的token";
 //token
 $post = file_get_contents("php://input");
 $post = '[' . $post . ']';
