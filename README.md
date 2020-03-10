@@ -1,10 +1,10 @@
 # netease_telegram_bot
 
-一个自己做的telegram机器人
+一个自己做的网易云音乐的telegram机器人,调用了自建API
 
 ## 食用方法
-1.修改telegram.php中的token为自己的
-2.将自己机器人的webhook指向该文件即可
+1.修改telegram.php中的token为自己的.<br />
+2.将自己机器人的webhook指向该文件即可.
 
 ## 版权归属
 xneteasebot v1.0<br />
