@@ -1,6 +1,6 @@
 <?php
 require_once "send.php";
-$token = "你的token";
+$token = "1019445623:AAFbkN2n3rcmQIGbpmSRiQ1Ek5OhZrfe8ic";
 //token
 $post = file_get_contents("php://input");
 $post = '[' . $post . ']';
@@ -21,9 +21,12 @@ $message = str_replace("@xneteasebot","",$data[0]);
 $content = $data[1];
 $content2 = $data[2];
 //分隔消息
+
+//指令判断
 if ($type == "bot_command") {
   switch ($message) {
     case '/ping':
+    //在线检测
       $data = array(
         "chat_id" => $chatid,
         "text" => 'pong',
@@ -32,6 +35,7 @@ if ($type == "bot_command") {
       break;
 
     case '/search':
+    //歌曲搜索
       if (empty($content)) {
         $data = array(
           "chat_id" => $chatid,
@@ -40,6 +44,7 @@ if ($type == "bot_command") {
         );
         send($data);
         exit();
+        //是否输入完全
       }
 
       $data = array(
@@ -47,7 +52,7 @@ if ($type == "bot_command") {
         "text" => 'searching...',
       );
       send($data);
-
+    //输出搜索中
 
       $url = "https://api.xsot.cn/netease/?type=search&limit=$content2&s=$content";
       @$data = file_get_contents($url);
@@ -96,7 +101,7 @@ if ($type == "bot_command") {
       if (empty($content) || empty($type) || ($type !== "name" && $type !== "id")) {
         $data = array(
           "chat_id" => $chatid,
-          "text" => '使用方式:/song [id/name] 关键词',
+          "text" => '使用方式:/song2 [id/name] 关键词',
           "reply_to_message_id" => $messageid
         );
         send($data);
@@ -108,6 +113,7 @@ if ($type == "bot_command") {
       );
       send($data);
       if ($type == "id") {
+          //id搜索类型
         $url = "https://api.xsot.cn/netease/?type=song&id=" . $content;
         @$data = file_get_contents($url);
         @$data = json_decode($data,true);
@@ -119,21 +125,25 @@ if ($type == "bot_command") {
             "reply_to_message_id" => $messageid
           );
           send($data);
+          exit();
         }
         //id检测
         @$url = $data['data']['url'];
         @$name = $data['data']['name'];
         @$artist = $data['data']['artist'];
+        @$pic = $data['data']['pic'];
         $data = array(
           "chat_id" => $chatid,
           "audio" => $url,
           "caption" => "$name - $artist",
           "title" => "$name - $artist",
           "performer" => $artist,
+          "thumb" => $pic,
           "reply_to_message_id" => $messageid
         );
         sendaudio($data);
       } else {
+          //name搜索类型
         $url = "https://api.xsot.cn/netease/?type=search&limit=1&s=$content";
         @$data = file_get_contents($url);
         @$data = json_decode($data,true);
@@ -151,15 +161,26 @@ if ($type == "bot_command") {
         $url = "https://api.xsot.cn/netease/?type=song&id=$id";
         @$data = file_get_contents($url);
         @$data = json_decode($data,true);
+        if ($data['code'] == 404) {
+          $data = array(
+            "chat_id" => $chatid,
+            "text" => '该歌曲失效啦,换个关键词试试',
+            "reply_to_message_id" => $messageid
+          );
+          send($data);
+          exit();
+        }
         @$url = $data['data']['url'];
         @$name = $data['data']['name'];
         @$artist = $data['data']['artist'];
+        @$pic = $data['data']['pic'];
         $data = array(
           "chat_id" => $chatid,
           "audio" => $url,
           "caption" => "$name - $artist",
           "title" => "$name - $artist",
           "performer" => $artist,
+          "thumb" => $pic,
           "reply_to_message_id" => $messageid
         );
         sendaudio($data);
@@ -194,6 +215,7 @@ if ($type == "bot_command") {
             "reply_to_message_id" => $messageid
           );
           send($data);
+          exit();
         }
         //id检测
         @$url = $data['data']['url'];
@@ -201,7 +223,7 @@ if ($type == "bot_command") {
         @$artist = $data['data']['artist'];
         $data = array(
           "chat_id" => $chatid,
-          "text" => $url,
+          "text" => "($name-$artist)$url",
           "reply_to_message_id" => $messageid
         );
         send($data);
@@ -223,15 +245,21 @@ if ($type == "bot_command") {
         $url = "https://api.xsot.cn/netease/?type=song&id=$id";
         @$data = file_get_contents($url);
         @$data = json_decode($data,true);
+        if ($data['code'] == 404) {
+          $data = array(
+            "chat_id" => $chatid,
+            "text" => '该歌曲失效啦,换个关键词试试',
+            "reply_to_message_id" => $messageid
+          );
+          send($data);
+          exit();
+        }
         @$url = $data['data']['url'];
         @$name = $data['data']['name'];
         @$artist = $data['data']['artist'];
         $data = array(
           "chat_id" => $chatid,
-          "text" => $url,
-          "caption" => "$name - $artist",
-          "title" => "$name - $artist",
-          "performer" => $artist,
+          "text" => "($name-$artist)$url",
           "reply_to_message_id" => $messageid
         );
         send($data);
@@ -240,7 +268,7 @@ if ($type == "bot_command") {
     case '/help':
         $year = date("Y");
       $text = "
-xneteasebot v1.0
+xneteasebot v1.1
 BY XCSOFT
 
 指令列表:
