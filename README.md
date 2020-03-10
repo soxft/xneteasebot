@@ -7,7 +7,7 @@
 2.将自己机器人的webhook指向该文件即可.
 
 ## 版权归属
-xneteasebot v1.0<br />
+xneteasebot v1.1<br />
 BY XCSOFT<br />
 <br />
 指令列表:<br />
