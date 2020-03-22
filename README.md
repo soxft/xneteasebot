@@ -5,7 +5,7 @@
 ## 食用方法
 1.修改index.php中的token为自己的.<br />
 2.修改index.php 中的mysql信息指向自己的mysql数据库,并导入根目录下的mysql.sql<br />
-3.修改chat.php中的腾讯ai智能闲聊的appid等数据为自己的(https://ai.qq.com)可以免费申请<br />
+3.修改chat.php中的腾讯ai智能闲聊的appid等数据为自己的( https://ai.qq.com )可以免费申请<br />
 4.将自己机器人的webhook指向该文件即可.
 
 ## 版权归属
